@@ -25,10 +25,14 @@ async function exec(commands: string[]) {
       await readFile(command);
     } else if (command.startsWith(Commands.WRITE)) {
       await writeFile(command);
+    } else if (command.startsWith(Commands.APPEND)) {
+      await appendFile(command);
     } else if (command.startsWith(Commands.DELETE)) {
       await deleteFile(command);
     } else if (command.startsWith(Commands.RENAME)) {
       await renameFile(command);
+    } else if (command.startsWith(Commands.COPY)) {
+      await copyFile(command);
     }
   }
 }
@@ -111,6 +115,18 @@ async function writeFile(command: string) {
   }
 }
 
+async function appendFile(command: string) {
+  const { ok, content, path } = getArgs(command);
+
+  if (!ok) return;
+
+  try {
+    await fs.appendFile(path, content);
+  } catch (e) {
+    console.log("The file doesnt exists.", e);
+  }
+}
+
 async function deleteFile(command: string) {
   const { ok, content, path } = getArgs(command);
 
@@ -132,6 +148,18 @@ async function renameFile(command: string) {
     fs.rename(path, content);
   } catch (e) {
     console.log("Unable to rename the file.", e);
+  }
+}
+
+async function copyFile(command: string) {
+  const { ok, path, content } = getArgs(command);
+
+  if (!ok) return;
+
+  try {
+    await fs.copyFile(path, content);
+  } catch (e) {
+    console.log("The file could not be copied.", e);
   }
 }
 
