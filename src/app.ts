@@ -20,11 +20,13 @@ async function handleChange() {
 async function exec(commands: string[]) {
   for (const command of commands) {
     if (command.startsWith(Commands.CREATE)) {
-      await create(command);
+      await createFile(command);
     } else if (command.startsWith(Commands.READ)) {
-      await read(command);
+      await readFile(command);
     } else if (command.startsWith(Commands.WRITE)) {
-      await write(command);
+      await writeFile(command);
+    } else if (command.startsWith(Commands.DELETE)) {
+      await deleteFile(command);
     }
   }
 }
@@ -54,7 +56,7 @@ function getArgs(command: string): Args {
   return res;
 }
 
-async function create(command: string) {
+async function createFile(command: string) {
   const { ok, content, path } = getArgs(command);
 
   if (!ok) return;
@@ -81,7 +83,7 @@ async function create(command: string) {
   await existingFile.close();
 }
 
-async function read(command: string) {
+async function readFile(command: string) {
   const { ok, path } = getArgs(command);
 
   if (!ok) return;
@@ -95,7 +97,7 @@ async function read(command: string) {
   }
 }
 
-async function write(command: string) {
+async function writeFile(command: string) {
   const { ok, content, path } = getArgs(command);
 
   if (!ok) return;
@@ -104,6 +106,18 @@ async function write(command: string) {
     await fs.writeFile(path, content);
   } catch (e) {
     console.log("The file doesnt exists.", e);
+  }
+}
+
+async function deleteFile(command: string) {
+  const { ok, content, path } = getArgs(command);
+
+  if (!ok) return;
+
+  try {
+    await fs.unlink(path);
+  } catch (e) {
+    console.log("Unable to delete the file.", e);
   }
 }
 
