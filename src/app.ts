@@ -11,7 +11,7 @@ async function handleChange() {
 
     const commands = file.toString("utf-8").split("\r\n");
 
-    exec(commands);
+    await exec(commands);
   } catch (e) {
     console.error(e);
   }
@@ -19,19 +19,21 @@ async function handleChange() {
 
 async function exec(commands: string[]) {
   for (const command of commands) {
-    if (command.startsWith(Commands.CREATE)) {
+    const operation = command.split(" ").at(0);
+
+    if (operation === Commands.CREATE) {
       await createFile(command);
-    } else if (command.startsWith(Commands.READ)) {
+    } else if (operation === Commands.READ) {
       await readFile(command);
-    } else if (command.startsWith(Commands.WRITE)) {
+    } else if (operation === Commands.WRITE) {
       await writeFile(command);
-    } else if (command.startsWith(Commands.APPEND)) {
+    } else if (operation === Commands.APPEND) {
       await appendFile(command);
-    } else if (command.startsWith(Commands.DELETE)) {
+    } else if (operation === Commands.DELETE) {
       await deleteFile(command);
-    } else if (command.startsWith(Commands.RENAME)) {
+    } else if (operation === Commands.RENAME) {
       await renameFile(command);
-    } else if (command.startsWith(Commands.COPY)) {
+    } else if (operation === Commands.COPY) {
       await copyFile(command);
     }
   }
