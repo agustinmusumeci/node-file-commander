@@ -3,4 +3,5 @@ export enum Commands {
   READ = "READ",
   WRITE = "WRITE",
   DELETE = "DELETE",
+  RENAME = "RENAME",
 }

@@ -27,6 +27,8 @@ async function exec(commands: string[]) {
       await writeFile(command);
     } else if (command.startsWith(Commands.DELETE)) {
       await deleteFile(command);
+    } else if (command.startsWith(Commands.RENAME)) {
+      await renameFile(command);
     }
   }
 }
@@ -118,6 +120,18 @@ async function deleteFile(command: string) {
     await fs.unlink(path);
   } catch (e) {
     console.log("Unable to delete the file.", e);
+  }
+}
+
+async function renameFile(command: string) {
+  const { ok, path, content } = getArgs(command);
+
+  if (!ok) return;
+
+  try {
+    fs.rename(path, content);
+  } catch (e) {
+    console.log("Unable to rename the file.", e);
   }
 }
 
