@@ -1,4 +1,4 @@
-export enum Commands {
+export enum Operations {
   CREATE = "CREATE",
   READ = "READ",
   WRITE = "WRITE",
